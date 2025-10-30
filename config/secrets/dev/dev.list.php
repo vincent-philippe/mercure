@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'MECURE_JWT_SECRET' => null,
+    'MERCURE_JWT_SECRET' => null,
 ];
