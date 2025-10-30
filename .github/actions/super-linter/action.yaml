@@ -1,0 +1,8 @@
+name: "Custom Super-Linter"
+description: "Slim Super-Linter with extra extensions"
+runs:
+  using: "docker"
+  image:
+    build: 
+      context: .
+      dockerfile: "Dockerfile"

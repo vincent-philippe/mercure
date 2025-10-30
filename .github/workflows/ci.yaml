@@ -77,7 +77,7 @@ jobs:
         run: |
           docker build \
             -t custom-super-linter \
-            -f .github/superlinter.Dockerfile .
+            -f .github/docker/superlinter.Dockerfile .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CHECKOV: false
