@@ -74,10 +74,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Lint Code Base
-        run: |
-          docker build \
-            -t custom-super-linter \
-            -f .github/docker/superlinter.Dockerfile .
+        uses: ./.github/actions/super-linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CHECKOV: false
