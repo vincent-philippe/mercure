@@ -16,7 +16,7 @@ class ArticleController extends AbstractController
     public function publish(HubInterface $hub): Response
     {
         $update = new Update(
-            'https://localhost/pub/articles',
+            'http://localhost/pub/articles',
             json_encode(['status' => 'InStock'])
         );
 
