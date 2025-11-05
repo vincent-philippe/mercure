@@ -7,12 +7,45 @@ with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) 
 
 ## Getting Started
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --pull --no-cache` to build fresh images
-3. Load the default .env.dev as local environment (`cp .env.dev .env.dev.local`)
-3. Run `docker compose --env-file=.env.dev.local up --wait` to set up and start a fresh Symfony project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+Since running the project with docker imply using a .env file which is the file docker-compose check about for context,
+we need to defined the env file at first [#4223 🐋 .env file is not read](https://github.com/docker/compose/issues/4223#issuecomment-280077263)
+
+1. You need to copy the .env.[dev|prod] into your .env.[dev|prod].local
+
+2. Now you need to decrypt the encrypted data to your .env.[dev|prod].local
+
+__Fetch the decrypt key from the project administrator__ and place it inside the config/secrets/[dev|prod]
+
+3. and run the one-time container such as
+
+```sh
+docker compose build --pull --no-cache \
+&& touch .env
+&& docker compose run --rm -it -v ${PWD}:/app php php bin/console secrets:decrypt-to-local --force
+```
+
+⚠️ Check that the environment variables are indeed decrypted correctly through your .env.[dev|prod].local (you should see something like MERCURE_JWT_SECRET)
+
+4. Now, you'll need to run the following (so docker-compose have environment context defined)
+
+```
+cat .env.dev.local | grep -E 'SERVER_NAME|MERCURE_JWT_SECRET|MERCURE_PUBLIC_URL|MERCURE_URL|DEFAULT_URI' > .env
+```
+
+7. Run `docker compose build` to build fresh images
+6. Run `docker compose up --env-file=.env.[dev|prod].local --wait` to set up and start a fresh Symfony project
+8. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
+
+### In prod environment
+
+The following line will generate the production-ready env .env.local.php
+
+⚠️ Real environment variables always win over env vars created by any of the .env files.
+
+```
+docker pull composer/composer
+docker run --rm -it -v "$(pwd):/app" composer/composer dump-env prod
+```
 
 ## Features
 

@@ -57,15 +57,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 	fi
 
-    echo "decrypt secrets to local environment..."
-	
-	php bin/console secrets:decrypt-to-local --force
-	# the following line is a workaround, I explain it
-	# That's actually a workaround since at environment step docker can't define multiple env_file
-    # Also, we need 1. define hardcoded plain value for dev environment and 2. gather secrets data to local (uncommited env)
-	cp .env.$APP_ENV.local .env.$APP_ENV.local.tmp
-    awk '!seen[$0]++' .env.$APP_ENV .env.$APP_ENV.local.tmp .env.$APP_ENV.local > .env.$APP_ENV.local.tmp && mv .env.$APP_ENV.local.tmp .env.$APP_ENV.local # merging files
-	echo 'PHP app ready!'
+    echo 'PHP app ready!'
 fi
 
 exec docker-php-entrypoint "$@"
