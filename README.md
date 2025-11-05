@@ -29,7 +29,7 @@ docker compose build --pull --no-cache \
 4. Now, you'll need to run the following (so docker-compose have environment context defined)
 
 ```
-cat .env.dev.local | grep -E 'SERVER_NAME|MERCURE_JWT_SECRET|MERCURE_PUBLIC_URL|MERCURE_URL|DEFAULT_URI' > .env
+cat .env.[dev|prod].local | grep -E 'SERVER_NAME|MERCURE_JWT_SECRET|MERCURE_PUBLIC_URL|MERCURE_URL|DEFAULT_URI|APP_SECRET' > .env
 ```
 
 7. Run `docker compose build` to build fresh images
